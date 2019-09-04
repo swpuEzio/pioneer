@@ -1,0 +1,88 @@
+    <!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>登录 |咕噜橙的博客</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <link href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body style="background-color: #f1f1f1; padding-bottom: 0">
+
+
+<div class="container" style="margin-top: 60px">
+
+    <div class="row" style="margin-top: 100px">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-console"></span> Login</h3>
+                </div>
+                <div class="panel-body">
+                    <form name="loginForm" th:action="@{/login}" method="post">
+                        <div class="form-group" style="margin-top: 30px">
+                            <div class="input-group col-md-6 col-md-offset-3">
+                                <div class="input-group-addon"><span class="glyphicon glyphicon-user"></span></div>
+                                <input name="username" id="username" type="text" class="form-control" placeholder="手机号码" onclick="myValidateUsername()">
+                                <!--id或者name放在最前面，否则获取js获取不到value-->
+                            </div>
+                        </div>
+                            <div class="form-group ">
+                            <div class="input-group col-md-6 col-md-offset-3">
+                                <div class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></div>
+                                <input type="password" class="form-control" name="password" id="password"
+                                       placeholder="密码" onclick="myValidatePassword()">
+                            </div>
+                        </div>
+                        <br>
+                        <div>
+                            <p id="someMeg" style="text-align: center" class="text-danger"></p>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-group col-md-6 col-md-offset-3 col-xs-12 ">
+                                <button type="submit" class="btn btn-primary btn-block" name="login" id="login">登录</button>
+                                <!--<a href="/qqLogin" class="btn btn-primary btn-block">QQ登陆</a>-->
+                            </div>
+                        </div>
+                        <div th:if="${param.error}">
+                            <p style="text-align: center" class="text-danger">登录失败，账号或密码错误!</p>
+                        </div>
+                        <div th:if="${result}">
+                            <p style="text-align: center" class="text-success" th:text="${result}"></p>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group col-md-6 col-md-offset-3" style="text-align: center">
+                                <a href="/register">创建账号</a> | 忘记密码?
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div>
+    <textarea id="num"></textarea>
+    <textarea id="name"></textarea>
+    <button id="check">检验</button>
+</div>
+<div class="headChange">
+    <div class="headPortraitChange">
+        <input id="file" type="file" onchange="imgChange(this)"  >
+        <a>更改头像</a>
+    </div>
+</div>
+<div>
+    <button id="like">喜欢</button>
+</div>
+<script src="js/login.js"></script>
+
+</body>
+
+</html>
