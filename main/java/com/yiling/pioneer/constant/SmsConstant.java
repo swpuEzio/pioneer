@@ -6,8 +6,8 @@ package com.yiling.pioneer.constant;
  * @Description: 阿里云密钥
  **/
 public class SmsConstant {
-    public static final  String ACCESS_KEY_ID = "LTAI8Q89VLxLxDYU";
-    public static final String  SECRET = "XZr8oNqJ3JmUvla8ZHw6eKDhyvZJNw";
+    public static final  String ACCESS_KEY_ID = "*********";
+    public static final String  SECRET = "**********";
     /**
      * 阿里云API的外网域名
      */
