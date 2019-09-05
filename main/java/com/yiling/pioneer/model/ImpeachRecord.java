@@ -15,3 +15,4 @@ public class ImpeachRecord {
     private int articleID;
     private String content;
 }
+ 
