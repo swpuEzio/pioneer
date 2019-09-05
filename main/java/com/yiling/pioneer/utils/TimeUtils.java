@@ -1,5 +1,6 @@
 package com.yiling.pioneer.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -20,5 +21,11 @@ public class TimeUtils {
         String timeNum = Long.toString(getLongTime());
         String timeID = timeNum.substring(5,13);
         return timeID;
+    }
+
+    public static String formatTime(Date date){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = sdf.format(date);
+        return time;
     }
 }
