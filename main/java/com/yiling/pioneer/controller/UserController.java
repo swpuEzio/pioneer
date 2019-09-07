@@ -36,10 +36,10 @@ public class UserController {
     MediaService mediaService;
     @GetMapping("/checkIDCard")
     public JSONObject checkIDCard(@RequestParam("num") String num, @RequestParam("name") String name){
-        String host = "http://idcard3.market.alicloudapi.com";
-        String path = "/idcardAudit";
+        String host = "*********";
+        String path = "*****";
         String method = "GET";
-        String appcode = "4fdf0aab33fd4f5faaf47199077a5aaa";
+        String appcode = "*****";
         Map<String, String> headers = new HashMap<String, String>();
         //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
         headers.put("Authorization", "APPCODE " + appcode);
