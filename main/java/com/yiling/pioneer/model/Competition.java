@@ -18,7 +18,11 @@ public class Competition {
     /**
      * 比赛的ID
      */
-    private int cID;
+    private long cID;
+    /**
+     * 比赛标题
+     */
+    private String title;
     /**
      * 比赛时间
      */
@@ -34,11 +38,11 @@ public class Competition {
     /**
      * 比赛规定总人数
      */
-    private String totalNum;
+    private int totalNum;
     /**
      * 已报名参加人数
      */
-    private String joinNum;
+    private int joinNum;
     /**
      * 是否到期，0未到期，1已到期
      */
