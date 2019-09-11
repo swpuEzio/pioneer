@@ -28,8 +28,10 @@ public interface CompetitionMapper {
      * @param cID
      * @return
      */
-    @Select("select cID,time,place,content,expire from competition where cID = #{cID}")
+    @Select("select cID,time,place,content,expire,title from competition where cID = #{cID}")
     Competition getCompetitionInfoByCID(@Param("cID") String cID);
 
+    @Select("select title,place,amount from competition where cID = #{cID}")
+    Competition getPayInfoByCID(@Param("cID") String cID);
 
 }
