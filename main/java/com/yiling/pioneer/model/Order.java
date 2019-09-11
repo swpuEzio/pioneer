@@ -21,7 +21,7 @@ public class Order {
     /**
      * 支付金额
      */
-    private String order_amount;
+    private float order_amount;
     /**
      * 比赛ID
      */
