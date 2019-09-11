@@ -9,6 +9,7 @@ import com.yiling.pioneer.model.MyUser;
 import com.yiling.pioneer.service.ImpeachRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,7 @@ import java.security.Principal;
  * @Date: 2019/9/5 17:20
  * @Description:
  **/
+@CrossOrigin
 @RestController
 public class ImpeachRecordController {
     @Autowired
