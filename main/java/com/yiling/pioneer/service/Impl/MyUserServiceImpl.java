@@ -1,7 +1,6 @@
 package com.yiling.pioneer.service.Impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.sun.org.apache.bcel.internal.util.BCELifier;
 import com.yiling.pioneer.mapper.MyUserMapper;
 import com.yiling.pioneer.model.MyUser;
 import com.yiling.pioneer.service.MyUserService;
@@ -50,7 +49,7 @@ public class MyUserServiceImpl implements MyUserService {
                 return jsonObject;
             }else if (nickname.equals(m.get("nickname"))){
                 jsonObject.put("status",402);
-                jsonObject.put("message","用户名已存在");
+                jsonObject.put("message","昵称已存在");
                 return jsonObject;
             }
         }
@@ -87,7 +86,7 @@ public class MyUserServiceImpl implements MyUserService {
         String BCpassword = new BCryptPasswordEncoder().encode(password);
         JSONObject jsonObject = new JSONObject();
         try {
-            if(myUserMapper.updatePasswoed(username,BCpassword)){
+            if(myUserMapper.updatePassword(username,BCpassword)){
                 jsonObject.put("status",200);
                 jsonObject.put("message","修改成功");
             }else {
@@ -101,5 +100,21 @@ public class MyUserServiceImpl implements MyUserService {
             jsonObject.put("message","数据库异常");
             return jsonObject;
         }
+    }
+
+    @Override
+    public JSONObject getUIDByUsername(String username) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+
+            jsonObject.put("status",200);
+            jsonObject.put("uID",myUserMapper.getUIDByUsername(username));
+            return jsonObject;
+        }catch (Exception e){
+            e.printStackTrace();
+            jsonObject.put("status",500);
+            return jsonObject;
+        }
+
     }
 }
