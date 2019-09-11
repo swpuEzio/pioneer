@@ -41,5 +41,12 @@ public class Comment {
      * 被评论的评论者ID
      */
     private String lastUID;
-
+    /**
+     * 状态标识0未读1已读
+     */
+    private String status;
+    /**
+     * 回复状态标识
+     */
+    private String replyStatus;
 }
