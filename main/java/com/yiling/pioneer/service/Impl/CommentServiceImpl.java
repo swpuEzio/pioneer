@@ -154,4 +154,32 @@ public class CommentServiceImpl implements CommentService {
         jsonObject.put("Num",comments.size());
         return jsonObject;
     }
+
+    @Override
+    public JSONObject getReplyByReplyCommentID(String replyCommentID) {
+        List<Comment> comments = commentMapper.getReplyByReplyCommentID(replyCommentID);
+        JSONObject rejson = new JSONObject();
+        if (comments.isEmpty()){
+            rejson.put("status",404);
+            return rejson;
+        }
+        JSONArray result = new JSONArray();
+        for (Comment comment: comments){
+            MyUser commentUser = myUserMapper.getUserAllInfoByUID(comment.getUID());
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("commentID",comment.getCommentID());
+            jsonObject.put("uID",comment.getUID());
+            jsonObject.put("nickname",commentUser.getNickname());
+            jsonObject.put("avatarUrl",commentUser.getAvatarUrl());
+            jsonObject.put("content",comment.getContent());
+            jsonObject.put("sendTime",comment.getSendTime());
+            jsonObject.put("replyCommentID",comment.getReplyCommentID());
+            jsonObject.put("lastUID",comment.getLastUID());
+            jsonObject.put("lastNickname",myUserMapper.getUserAllInfoByUID(comment.getLastUID()).getNickname());
+            result.add(jsonObject);
+        }
+        rejson.put("status",200);
+        rejson.put("result",result);
+        return rejson;
+    }
 }
