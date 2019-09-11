@@ -58,5 +58,14 @@ public interface MyUserMapper {
      * @return false-更新失败；true-更新成功
      */
     @Update("update user set password = #{password} where username = #{username}")
-    boolean updatePasswoed(@Param("username") String username,@Param("password") String password);
+    boolean updatePassword(@Param("username") String username, @Param("password") String password);
+
+    /**
+     * 根据username获得uid
+     * @return
+     */
+    @Select("select uID from user where username = #{username}")
+    String getUIDByUsername(@Param("username") String username);
+
+
 }
