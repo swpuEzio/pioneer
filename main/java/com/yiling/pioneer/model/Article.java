@@ -39,7 +39,7 @@ public class Article {
      */
     private int likes;
     /**
-     * 审核状态
+     * 审核状态0未审核，1审核通过，2未通过
      */
     private int status;
 }
