@@ -24,7 +24,7 @@ public interface MediaMapper {
      * @return
      */
     @Select("select * from media where articleID = #{articleID}")
-    Media getUrlByArticleID(@Param("article") int articleID);
+    Media getUrlByArticleID(@Param("articleID") int articleID);
 
     /**
      * 插入记录
