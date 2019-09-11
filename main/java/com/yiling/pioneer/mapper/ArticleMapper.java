@@ -27,7 +27,7 @@ public interface ArticleMapper {
      * 获得已通过审核的文章，按时间降序
      * @return
      */
-    @Select("select * from article where status <= 10 order by sendTime desc")
+    @Select("select * from article where status = 1 order by sendTime desc")
     List<Article> getCheckedArticle();
 
     /**
