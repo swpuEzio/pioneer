@@ -61,4 +61,12 @@ public interface CommentService {
      * @return
      */
     JSONObject getUnReadReplyNum(String lastUID);
+
+    /**
+     * 获得目标评论的回复
+     * @param replyCommentID
+     * @return
+     */
+
+    JSONObject getReplyByReplyCommentID(String replyCommentID);
 }
