@@ -2,7 +2,7 @@ package com.yiling.pioneer.model;
 
 import lombok.Data;
 
-import java.security.Principal;
+
 
 /**
  * @Author: xc
@@ -19,6 +19,10 @@ public class Competition {
      * 比赛的ID
      */
     private long cID;
+    /**
+     * 比赛标题
+     */
+    private String title;
     /**
      * 比赛标题
      */
@@ -46,5 +50,9 @@ public class Competition {
     /**
      * 是否到期，0未到期，1已到期
      */
-    private String expire;
+    private int expire;
+    /**
+     * 报名金额
+     */
+    private float amount;
 }
