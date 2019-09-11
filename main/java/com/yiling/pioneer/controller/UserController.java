@@ -4,12 +4,14 @@ import com.alibaba.fastjson.JSONObject;
 
 import com.yiling.pioneer.service.MediaService;
 import com.yiling.pioneer.service.MyUserService;
+import com.yiling.pioneer.service.RedisService;
 import com.yiling.pioneer.utils.*;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,24 +24,28 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: xc
  * @Date: 2019/7/10 11:28
  * @Description:
  **/
+@CrossOrigin
 @RestController
 public class UserController {
     @Autowired
     MyUserService myUserService;
     @Autowired
     MediaService mediaService;
+    @Autowired
+    RedisTemplate redisTemplate;
     @GetMapping("/checkIDCard")
     public JSONObject checkIDCard(@RequestParam("num") String num, @RequestParam("name") String name){
-        String host = "*********";
-        String path = "*****";
+        String host = "http://idcard3.market.alicloudapi.com";
+        String path = "/idcardAudit";
         String method = "GET";
-        String appcode = "*****";
+        String appcode = "4fdf0aab33fd4f5faaf47199077a5aaa";
         Map<String, String> headers = new HashMap<String, String>();
         //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
         headers.put("Authorization", "APPCODE " + appcode);
@@ -77,13 +83,28 @@ public class UserController {
         }
     }
 
-    @PostMapping("/register")
-    public JSONObject register(@RequestParam String IDCard,
-                               @RequestParam String name,
-                               @RequestParam String phoneNum,
-                               @RequestParam String nickname){
 
-        return myUserService.addUser(IDCard,name,phoneNum,nickname);
+    @PostMapping("/register")
+    public JSONObject register(@RequestParam("IDCard") String IDCard,
+                               @RequestParam("name") String name,
+                               @RequestParam("phoneNum") String phoneNum,
+                               @RequestParam("nickname") String nickname,
+                               @RequestParam("code" )String code){
+        String savedCode = String.valueOf(redisTemplate.opsForValue().get(phoneNum));
+        JSONObject jsonObject = new JSONObject();
+
+        if (savedCode==null){
+
+            jsonObject.put("status",403);
+            return jsonObject;
+        }else if (savedCode.equals(code)){
+            redisTemplate.delete(phoneNum);
+            return myUserService.addUser(IDCard,name,phoneNum,nickname);
+        }else {
+            jsonObject.put("status",404);
+            return jsonObject;
+        }
+
     }
     @GetMapping("/getMsgCode")
     public JSONObject getMsgCode(@RequestParam("phone") String phone){
@@ -94,29 +115,30 @@ public class UserController {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("status",200);
             jsonObject.put("message",msgJson.get("message"));
-            jsonObject.put("code",code);
+            redisTemplate.opsForValue().set(phone,code);
+            redisTemplate.expire(phone, 5, TimeUnit.MINUTES);
             jsonObject.put("createTime", System.currentTimeMillis());
             return jsonObject;
         }else {
             return msgJson;
         }
     }
-    @PostMapping("/updatePassword")
-    public JSONObject updatePassword(@AuthenticationPrincipal Principal principal,
+    @PostMapping("/forgotPassword")
+    public JSONObject forgotPassword( @RequestParam("code") String code,
                                      @RequestParam("password") String password,
                                      @RequestParam("phone") String phone){
-        String username = principal.getName();
-        if ( username == null){
-            username = phone;
-            if ( username == null){
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("status",400);
-                jsonObject.put("message","用户名为空");
-                return jsonObject;
-            }
+        JSONObject jsonObject = new JSONObject();
+        String savedCode = String.valueOf(redisTemplate.opsForValue().get(phone));
+        if (savedCode==null){
+            jsonObject.put("status",403);
+            return jsonObject;
+        }else if (savedCode.equals(code)){
+            redisTemplate.delete(phone);
+            return myUserService.updatePassword(phone,password);
+        }else {
+            jsonObject.put("status",404);
+            return jsonObject;
         }
-        return myUserService.updatePassword(username,password);
-
     }
 
     @PostMapping("/upVideo")
@@ -181,4 +203,21 @@ public class UserController {
         session.setAttribute("upload_percent",0);
     }
 
+    /**
+     * 获得当前用户的标识id
+     * @param principal
+     * @return
+     */
+    @GetMapping("/getUIDByUsername")
+    public JSONObject getUIDByUsername(@AuthenticationPrincipal Principal principal){
+        try {
+            String username = principal.getName();
+            return myUserService.getUIDByUsername(username);
+        }catch (Exception e){
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("status",404);
+            return jsonObject;
+        }
+
+    }
 }
