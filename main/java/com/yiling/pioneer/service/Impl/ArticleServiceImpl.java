@@ -26,15 +26,16 @@ public class ArticleServiceImpl implements ArticleService {
     ArticleMapper articleMapper;
     @Autowired
     MediaMapper mediaMapper;
+
     @Override
     public JSONObject getArticleByArticleID(String articleID) {
         JSONObject jsonObject = new JSONObject();
         Article article = articleMapper.getArticleByArticleID(articleID);
-        jsonObject.put("authorID",article.getAuthorID());
-        jsonObject.put("title",article.getTitle());
-        jsonObject.put("sendTime",article.getSendTime());
-        jsonObject.put("content",article.getContent());
-        jsonObject.put("mediaUrl",mediaMapper.getUrlByArticleID(Integer.parseInt(articleID)));
+        jsonObject.put("authorID", article.getAuthorID());
+        jsonObject.put("title", article.getTitle());
+        jsonObject.put("sendTime", article.getSendTime());
+        jsonObject.put("content", article.getContent());
+        jsonObject.put("mediaUrl", mediaMapper.getUrlByArticleID(Integer.parseInt(articleID)));
         return jsonObject;
     }
 
@@ -44,49 +45,65 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public JSONObject getCheckedArticle( int pageNum,int rows) {
-        PageHelper.startPage(pageNum,rows);
+    public JSONObject getCheckedArticle(int pageNum, int rows) {
+        PageHelper.startPage(pageNum, rows);
         List<Article> articles = articleMapper.getCheckedArticle();
+
         JSONObject rejson = new JSONObject();
+
         PageInfo<Article> pageInfo = new PageInfo<>(articles);
 
         JSONObject pageJson = new JSONObject();
-        pageJson.put("pageNum",pageInfo.getPageNum());
-        pageJson.put("pageSize",pageInfo.getPageSize());
-        pageJson.put("total",pageInfo.getTotal());
-        pageJson.put("pages",pageInfo.getPages());
-        pageJson.put("isFirstPage",pageInfo.isIsFirstPage());
-        pageJson.put("isLastPage",pageInfo.isIsLastPage());
-        if (articles.isEmpty()){
-            rejson.put("status",404);
+        pageJson.put("pageNum", pageInfo.getPageNum());
+        pageJson.put("pageSize", pageInfo.getPageSize());
+        pageJson.put("total", pageInfo.getTotal());
+        pageJson.put("pages", pageInfo.getPages());
+        pageJson.put("isFirstPage", pageInfo.isIsFirstPage());
+        pageJson.put("isLastPage", pageInfo.isIsLastPage());
+        if (articles.isEmpty()) {
+            rejson.put("status", 404);
             return rejson;
         }
+
         JSONArray result = new JSONArray();
-        for (Article article:articles){
-            Media media = mediaMapper.getUrlByArticleID(article.getArticleID());
+        for (Article article : articles) {
+
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("articleID",article.getArticleID());
-            jsonObject.put("authorID",article.getAuthorID());
-            jsonObject.put("title",article.getTitle());
-            jsonObject.put("sendTime",article.getSendTime());
-            jsonObject.put("content",article.getContent());
-            jsonObject.put("like",article.getLikes());
-            jsonObject.put("mediaUrl",media.getUrl());
+            try {
+                Media media = mediaMapper.getUrlByArticleID(article.getArticleID());
+                System.out.println("文章：" + article.getArticleID() + "---该文章有视频地址位：" + media.getUrl());
+                jsonObject.put("mediaUrl", media.getUrl());
+
+            } catch (Exception e) {
+                System.out.println("文章：" + article.getArticleID() + "---该文章没有视频");
+                jsonObject.put("mediaUrl", "");
+
+            }
+            jsonObject.put("articleID", article.getArticleID());
+            jsonObject.put("authorID", article.getAuthorID());
+            jsonObject.put("title", article.getTitle());
+            jsonObject.put("sendTime", article.getSendTime());
+            jsonObject.put("content", article.getContent());
+            jsonObject.put("like", article.getLikes());
             result.add(jsonObject);
+
+
         }
-        rejson.put("status",200);
-        rejson.put("pageJson",pageJson);
-        rejson.put("result",result);
+
+        rejson.put("status", 200);
+        rejson.put("pageJson", pageJson);
+        rejson.put("result", result);
+
         return rejson;
     }
 
     @Override
     public JSONObject add(Article article) {
         JSONObject jsonObject = new JSONObject();
-        if (articleMapper.add(article)){
-            jsonObject.put("status",200);
-        }else {
-            jsonObject.put("status",500);
+        if (articleMapper.add(article)) {
+            jsonObject.put("status", 200);
+        } else {
+            jsonObject.put("status", 500);
         }
         return jsonObject;
     }
@@ -96,10 +113,10 @@ public class ArticleServiceImpl implements ArticleService {
         JSONObject jsonObject = new JSONObject();
         int currentNum = articleMapper.getStatusByArticleID(articleID);
         int num = currentNum++;
-        if (articleMapper.updateArticleStatus(articleID,num)){
-            jsonObject.put("status",200);
-        }else {
-            jsonObject.put("status",500);
+        if (articleMapper.updateArticleStatus(articleID, num)) {
+            jsonObject.put("status", 200);
+        } else {
+            jsonObject.put("status", 500);
         }
         return jsonObject;
     }
