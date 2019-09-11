@@ -8,6 +8,7 @@ import com.yiling.pioneer.service.MyUserService;
 import com.yiling.pioneer.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,7 @@ import java.security.Principal;
  * @Date: 2019/8/30 13:04
  * @Description:
  **/
+@CrossOrigin
 @RestController
 public class LikeController {
 
