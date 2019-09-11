@@ -24,5 +24,5 @@ public class Media {
     /**
      * 存储的url
      */
-    private int url;
+    private String url;
 }
