@@ -44,4 +44,11 @@ public interface MyUserService {
      * }
      */
     JSONObject updatePassword(String username,String password);
+
+    /**
+     * 获取用户uID
+     * @param username
+     * @return
+     */
+    JSONObject getUIDByUsername(String username);
 }
