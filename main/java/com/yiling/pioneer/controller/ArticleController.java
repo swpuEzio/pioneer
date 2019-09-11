@@ -25,6 +25,7 @@ import java.util.Date;
  * @Date: 2019/8/25 18:52
  * @Description:
  **/
+@CrossOrigin
 @RestController
 public class ArticleController {
     @Autowired
