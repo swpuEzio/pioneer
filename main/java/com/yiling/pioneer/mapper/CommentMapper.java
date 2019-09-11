@@ -68,4 +68,12 @@ public interface CommentMapper {
      */
     @Select("select * from comment where lastUID = #{lastUID} and replyStatus = 0 order by sendTime desc")
     List<Comment> getUnReadReply(@Param("lastUID") String lastUID);
+
+    /**
+     * 获得目标评论的回复
+     * @param replyCommentID
+     * @return
+     */
+    @Select("select * from comment where replyCommentID = #{replyCommentID}")
+    List<Comment> getReplyByReplyCommentID(@Param("replyCommentID") String replyCommentID);
 }
